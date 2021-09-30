@@ -1,0 +1,75 @@
+<section class="w-full h-full flex-col flex items-center justify-evenly">
+  <div class="w-1/2">
+    <h2 class="text-3xl text-center leading-tight font-white font-bold text-white mb-4">Let's make you feel secure
+      !</h2>
+    <div class="w-full">
+      <form (submit)="onSubmit()" [formGroup]="registerForm"
+            class="bg-white w-full shadow-md rounded px-8 pt-6 pb-8 mb-4">
+        <div class="mb-4">
+          <label class="block text-gray-700 text-sm font-bold mb-2" for="username">
+            Username
+          </label>
+          <input
+            [ngClass]="submitted && registerForm.controls.username.errors ? 'border-red-500' : 'border'"
+            class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+            id="username"
+            type="text"
+            formControlName="username"
+            placeholder="Username">
+        </div>
+        <div class="mb-4">
+          <label class="block text-gray-700 text-sm font-bold mb-2" for="username">
+            Email address
+          </label>
+          <input
+            [ngClass]="submitted && registerForm.controls.email.errors ? 'border-red-500' : 'border'"
+            class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+            id="email"
+            type="text"
+            formControlName="email"
+            placeholder="Email address">
+        </div>
+        <div class="flex">
+          <div class="mb-2 w-1/2 mr-1">
+            <label class="block text-gray-700 text-sm font-bold mb-2" for="password">
+              Password
+            </label>
+            <input
+              [ngClass]="submitted && registerForm.controls.password.errors ? 'border-red-500' : 'border'"
+              class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+              id="password"
+              (change)="checkPassword()"
+              formControlName="password"
+              type="password"
+              placeholder="******************">
+            <app-password-strength *ngIf="registerForm.get('password')?.value" [password]="registerForm.get('password')?.value"></app-password-strength>
+          </div>
+          <div class="mb-2 w-1/2 ml-2">
+            <label class="block text-gray-700 text-sm font-bold mb-2" for="password">
+              Password check
+            </label>
+            <input
+              [ngClass]="submitted && registerForm.controls.repassword.errors ? 'border-red-500' : 'border'"
+              class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+              id="repassword"
+              (change)="checkPassword()"
+              type="password"
+              formControlName="repassword"
+              placeholder="******************">
+          </div>
+        </div>
+        <div *ngIf="!passwordError" class="bg-red-100 mb-6 border border-red-400 text-red-700 px-4 py-3 rounded relative" role="alert">
+          <span class="block sm:inline">Your passwords doesn't match.</span>
+        </div>
+        <div class="w-full text-right">
+          <button
+            [disabled]="!registerForm.valid || !passwordError"
+            class="bg-blue-700 hover:bg-blue-900 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
+            type="submit">
+            Register
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+</section>

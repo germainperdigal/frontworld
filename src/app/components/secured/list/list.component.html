@@ -1,0 +1,67 @@
+<section class="w-full h-full flex-col flex items-center justify-evenly">
+  <div class="w-5/6">
+    <h2 class="text-3xl text-center leading-tight font-white font-bold text-white mb-4">Your <u>secured</u> passwords</h2>
+    <div class="w-full bg-white pb-2 rounded shadow">
+      <table class="items-center w-full border-0">
+        <thead>
+        <tr>
+          <th class="px-6 bg-blueGray-50 text-blueGray-500 align-middle border border-solid border-blueGray-100 py-3 text-sm uppercase border-l-0 border-r-0 whitespace-nowrap font-semibold text-left">
+            Website
+          </th>
+          <th class="px-6 bg-blueGray-50 text-blueGray-500 align-middle border border-solid border-blueGray-100 py-3 text-sm uppercase border-l-0 border-r-0 whitespace-nowrap font-semibold text-left">
+            Username
+          </th>
+          <th class="px-6 bg-blueGray-50 text-blueGray-500 align-middle border border-solid border-blueGray-100 py-3 text-sm uppercase border-l-0 border-r-0 whitespace-nowrap font-semibold text-left">
+            Password
+          </th>
+          <th class="px-6 bg-blueGray-50 text-blueGray-500 align-middle border border-solid border-blueGray-100 py-3 text-sm uppercase border-l-0 border-r-0 whitespace-nowrap font-semibold text-left">
+            Compromised
+          </th>
+          <th class="px-6 bg-blueGray-50 text-blueGray-500 align-middle border border-solid border-blueGray-100 py-3 text-sm uppercase border-l-0 border-r-0 whitespace-nowrap font-semibold text-left">
+          </th>
+        </tr>
+        </thead>
+        <div *ngIf="!passwords" class="block w-full text-center my-4 font-bold text-xl text-gray-400">No password stored... It's time to secure yours.</div>
+        <tbody *ngIf="passwords">
+        <tr *ngFor="let password of passwords; index as i" [ngClass]="editedRow === i ? 'bg-gray-200 bg-opacity-75' : ((editedRow !== null) ? 'text-gray-400' : '')">
+          <th class="border-t-0 px-6 align-middle border-l-0 border-r-0 text-sm whitespace-nowrap p-4 text-left text-blueGray-700 ">
+            {{ password.website }}
+          </th>
+          <td class="border-t-0 px-6 align-middle border-l-0 border-r-0 text-sm whitespace-nowrap p-4 ">
+            {{ password.username ? password.username : 'N/A' }}
+          </td>
+          <td class="border-t-0 font-bold px-6 align-center border-l-0 border-r-0 text-sm whitespace-nowrap p-4">
+            <ng-container *ngIf="editedRow !== i; else editingInput">{{ password.cleared ? password.cleared : '******' }}</ng-container>
+            <ng-template #editingInput>
+              <input
+                class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+                id="password"
+                [(ngModel)]="edition"
+                type="password"
+                placeholder="*******">
+              <app-password-strength *ngIf="edition" [password]="edition"></app-password-strength>
+            </ng-template>
+          </td>
+          <td class="border-t-0 px-6 align-middle border-l-0 border-r-0 text-sm whitespace-nowrap p-4">
+            <span class="inline-flex items-center justify-center px-2 py-1 text-sm font-bold leading-none text-green-100 bg-green-600 rounded-full">No</span>
+          </td>
+          <td class="border-t-0 flex justify-evenly px-6 align-middle border-l-0 border-r-0 text-sm whitespace-nowrap p-4">
+            <ng-container *ngIf="editedRow !== i; else editingActions">
+              <fa-icon *ngIf="!password.cleared && electron.isElectron" (click)="decryptPassword(password.encryption, i)" [icon]="faEye" class="text-xl text-gray-700 cursor-pointer"></fa-icon>
+              <fa-icon *ngIf="password.cleared" (click)="resetPass()" [icon]="faEyeSlash" class="text-xl text-gray-700 cursor-pointer"></fa-icon>
+              <fa-icon *ngIf="electron.isElectron" (click)="decryptPassword(password.encryption, i, true)" [icon]="faCopy" class="text-xl text-gray-700 cursor-pointer"></fa-icon>
+              <fa-icon *ngIf="electron.isElectron" (click)="editRow(i)" [icon]="faPen" class="text-xl text-gray-700 cursor-pointer"></fa-icon>
+              <fa-icon (click)="deletePassword(password)" [icon]="faTimes" class="text-xl text-red-500 cursor-pointer"></fa-icon>
+            </ng-container>
+            <ng-template #editingActions>
+              <fa-icon (click)="updatePassword()" [icon]="faSave" class="text-xl cursor-pointer text-green-700"></fa-icon>
+              <fa-icon (click)="cancelEditing()" [icon]="faTimes" class="text-xl cursor-pointer text-red-700"></fa-icon>
+            </ng-template>
+          </td>
+        </tr>
+        </tbody>
+      </table>
+      <button *ngIf="!editedRow" class="bg-blue-700 hover:bg-blue-900 text-center mx-auto block text-white font-bold py-1 px-2 text-sm rounded focus:outline-none focus:shadow-outline" routerLink="/secured/passwords/add">Add a password</button>
+    </div>
+  </div>
+</section>
