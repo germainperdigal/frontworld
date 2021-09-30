@@ -24,8 +24,8 @@
         <div *ngIf="!passwords" class="block w-full text-center my-4 font-bold text-xl text-gray-400">No password stored... It's time to secure yours.</div>
         <tbody *ngIf="passwords">
         <tr *ngFor="let password of passwords; index as i" [ngClass]="editedRow === i ? 'bg-gray-200 bg-opacity-75' : ((editedRow !== null) ? 'text-gray-400' : '')">
-          <th class="border-t-0 px-6 align-middle border-l-0 border-r-0 text-sm whitespace-nowrap p-4 text-left text-blueGray-700 ">
-            {{ password.website }}
+          <th class="border-t-0 px-6 hover:underline cursor-pointer text-blue-500 align-middle border-l-0 border-r-0 text-sm whitespace-nowrap p-4 text-left text-blueGray-700 ">
+            <a (click)="electron.openExternalUrl(password.website)">{{ password.website }}</a>
           </th>
           <td class="border-t-0 px-6 align-middle border-l-0 border-r-0 text-sm whitespace-nowrap p-4 ">
             {{ password.username ? password.username : 'N/A' }}
