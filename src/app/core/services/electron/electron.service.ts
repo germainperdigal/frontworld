@@ -18,6 +18,7 @@ export class ElectronService {
   crypto;
   remote: typeof remote;
   childProcess: typeof childProcess;
+  shell;
   fs: typeof fs;
 
   get isElectron(): boolean {
@@ -29,6 +30,7 @@ export class ElectronService {
   ) {
     // Conditional imports
     if (this.isElectron) {
+      this.shell = window.require('electron').shell;
       this.ipcRenderer = window.require('electron').ipcRenderer;
       this.webFrame = window.require('electron').webFrame;
       this.crypto = window.require('crypto');
@@ -101,6 +103,19 @@ export class ElectronService {
     this.writePrivateFile(privateKey, userId);
 
     return of(true);
+  }
+
+  /**
+   * Open external url
+   *
+   * @param externalUrl The url to open
+   */
+  openExternalUrl(externalUrl: string) {
+    if (externalUrl.search(/^http[s]?\:\/\//) === -1) {
+      externalUrl = 'http://' + externalUrl;
+    }
+
+    this.shell.openExternal(externalUrl.replace(/href="(?!http)/, 'href="http://'));
   }
 
   /**
