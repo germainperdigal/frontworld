@@ -1,0 +1,14 @@
+{
+  "name": "PassWorld",
+  "version": "1.0.0",
+  "description": "Best password manager",
+  "author": {
+    "name": "Germain Perdigal",
+    "email": "perdigalgermain@gmail.com"
+  },
+  "main": "main.js",
+  "private": true,
+  "dependencies": {
+    "@electron/remote": "1.2.0"
+  }
+}
